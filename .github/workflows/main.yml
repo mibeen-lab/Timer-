@@ -1,0 +1,29 @@
+name: Build Electron App
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Package Electron App
+        run: npx electron-packager . church-timer --platform=win32 --arch=x64 --out=release-build --overwrite
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: church-timer-exe
+          path: release-build/church-timer-win32-x64/
